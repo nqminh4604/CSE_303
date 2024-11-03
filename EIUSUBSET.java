@@ -1,28 +1,35 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
-class EI2122Q1ADAM1 {
+public class EIUSUBSET {
 
     public static void main(String[] args) {
-        int n = ni();
-        int k = ni();
-        int count = 0;
-        Map<Integer, Integer> checkNumber = new HashMap<>();
+        int m = ni();
+        int[] arr = new int[m];
 
-        for (int i = 0; i < n; i++) {
-            int number = ni();
-            int value = checkNumber.getOrDefault(number, 0);
-            if (value > 0) {
-                count += value;
-                checkNumber.put(number, value);
-            }
-            checkNumber.put(number + k, checkNumber.getOrDefault(number + k, 0) + 1);
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = ni();
         }
-        System.out.println(count);
+
+        List<String> subset = new ArrayList<>();
+        for (int i = m - 1; i >= 0; i--) {
+            subset.add(String.valueOf(arr[i]));
+            int size = subset.size() - 1;
+            for (int j = 0; j < size; j++) {
+                subset.add(arr[i] + " " + subset.get(j));
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(subset.size()).append("\n");
+        for (String string : subset) {
+            sb.append(string).append("\n");
+        }
+        System.out.println(sb);
     }
 
     static InputStream is = System.in;

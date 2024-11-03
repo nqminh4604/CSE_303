@@ -1,28 +1,57 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.Map;
 
-class EI2122Q1ADAM1 {
+public class EIEQUALS {
 
     public static void main(String[] args) {
         int n = ni();
         int k = ni();
-        int count = 0;
-        Map<Integer, Integer> checkNumber = new HashMap<>();
 
-        for (int i = 0; i < n; i++) {
+        int[] arr1 = new int[n];
+        int[] arr2 = new int[n];
+
+        int sum1 = 0;
+        int sum2 = 0;
+
+        for (int i = 0; i < arr2.length; i++) {
             int number = ni();
-            int value = checkNumber.getOrDefault(number, 0);
-            if (value > 0) {
-                count += value;
-                checkNumber.put(number, value);
-            }
-            checkNumber.put(number + k, checkNumber.getOrDefault(number + k, 0) + 1);
+            sum1 += number;
+            arr1[i] = number;
         }
-        System.out.println(count);
+
+        for (int i = 0; i < arr2.length; i++) {
+            int number = ni();
+            sum2 += number;
+            arr2[i] = number;
+        }
+
+        if (Math.abs(sum1 - sum2) > k) {
+            System.out.println("NO");
+        } else {
+            Arrays.sort(arr1);
+            Arrays.sort(arr2);
+            int count = 0;
+            int i = 0;
+            int j = 0;
+            while (i < arr1.length && j < arr2.length) {
+                if (arr1[i] == arr2[j]) {
+                    i++;
+                    j++;
+                } else if (arr1[i] < arr2[j]) {
+                    i++;
+                    count++;
+                } else {
+                    j++;
+                }
+                if (count > 1) {
+                    break;
+                }
+            }
+            System.out.println(count > 1 ? "NO" : "YES");
+        }
+
     }
 
     static InputStream is = System.in;

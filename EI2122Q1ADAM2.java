@@ -1,28 +1,66 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.Map;
 
-class EI2122Q1ADAM1 {
+class EI2122Q1ADAM2 {
 
     public static void main(String[] args) {
         int n = ni();
-        int k = ni();
-        int count = 0;
-        Map<Integer, Integer> checkNumber = new HashMap<>();
+        int m = ni();
+        int x = ni();
+
+        int[] a1 = new int[n];
+        int[] a2 = new int[m];
 
         for (int i = 0; i < n; i++) {
-            int number = ni();
-            int value = checkNumber.getOrDefault(number, 0);
-            if (value > 0) {
-                count += value;
-                checkNumber.put(number, value);
-            }
-            checkNumber.put(number + k, checkNumber.getOrDefault(number + k, 0) + 1);
+            a1[i] = ni();
         }
-        System.out.println(count);
+        for (int i = 0; i < m; i++) {
+            a2[i] = ni();
+        }
+
+        Arrays.sort(a1);
+        Arrays.sort(a2);
+        
+        int start = 0;
+        int limit1 = Math.abs(a1[n - 1] - a2[0]);
+        int limit2 = Math.abs(a2[m - 1] - a1[0]);
+        int end = Math.max(limit1, limit2);
+
+        // binary search to find H
+        while (end > start) {
+            int mid = (end + start) / 2;
+            // counting how many pairs
+            if (canFormPairWithMaxH(n, m, a1, a2, start, end, mid, x)) {
+                end = mid;
+            } else {
+                start = mid + 1;
+            }
+        }
+        System.out.println(start);
+    }
+
+    private static boolean canFormPairWithMaxH(int n, int m, int[] a1, int[] a2, int start, int end, int maxH, int x) {
+        int count = 0;
+        int i = 0;
+        int j = 0;
+        while (i < n && j < m) {
+            if (Math.abs(a1[i] - a2[j]) <= maxH) {
+                count++;
+                i++;
+                j++;
+            } else if (a1[i] < a2[j]) {
+                i++;
+            } else {
+                j++;
+            }
+
+            if (count >= x) {
+                return true;
+            }
+        }
+        return count >= x;
     }
 
     static InputStream is = System.in;

@@ -1,28 +1,30 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.Map;
 
-class EI2122Q1ADAM1 {
+public class EIFLIP {
 
     public static void main(String[] args) {
         int n = ni();
-        int k = ni();
-        int count = 0;
-        Map<Integer, Integer> checkNumber = new HashMap<>();
-
         for (int i = 0; i < n; i++) {
-            int number = ni();
-            int value = checkNumber.getOrDefault(number, 0);
-            if (value > 0) {
-                count += value;
-                checkNumber.put(number, value);
-            }
-            checkNumber.put(number + k, checkNumber.getOrDefault(number + k, 0) + 1);
+            String str = boardToString();
+            
         }
-        System.out.println(count);
+    }
+
+    public static String boardToString() {
+        String  result = "";
+        int numberOfCells = 9;
+        for (int i = 0; i < numberOfCells; i++) {
+            char c = nc();
+            if (c == '*') {
+                result += 1;
+            } else {
+                result += 0;
+            }
+        }
+        return result;
     }
 
     static InputStream is = System.in;
