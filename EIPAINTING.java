@@ -17,7 +17,6 @@ public class EIPAINTING {
         int total = 0;
         int lastOdd = 0;
         int lastValue = 0;
-        int totalOdd = 0;
         for (int i = 0; i < pictures.length; i++) {
             int count = 1;
             if (i < pictures.length - 1) {

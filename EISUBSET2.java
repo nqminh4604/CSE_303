@@ -5,67 +5,30 @@ import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.List;
 
-public class EIFLIP {
+public class EISUBSET2 {
 
-    static int min = Integer.MAX_VALUE;
     public static void main(String[] args) {
-        int tc = ni();
-        for (int i = 0; i < tc; i++) {
-            boolean[][] board = getBoard();
-            int count = 0;
-            for (int position = 0; position < 9; position++) {
-                boolean[][] newBoard = click(board, position);
-                if (compareToModel(newBoard)) {
-                    
-                }
-                List<Boolean[][]> list = new ArrayList<>();
-            } 
-        }
-    }
-
-    
-    public static boolean[][] getBoard() {
-        boolean[][] board = new boolean[3][3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                board[i][j] = ns().equals("*") ? true : false;
+        int n = ni();
+        int k = ni();
+        List<Integer> subset = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            int number = ni();
+            int size = subset.size();
+            subset.add(number);
+            for (int j = 0; j < size; j++) {
+                subset.add(subset.get(j) + number);
             }
         }
-        return board;
-    }
-    
-    static boolean[][] model = { { false, false, false }, { false, false, false }, { false, false, false } };
-    public static boolean compareToModel(boolean[][] board) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] != model[i][j]) {
-                    return false;
-                }
+
+        int count = 0;
+        for (Integer integer : subset) {
+            if (integer.equals(k)) {
+                count++;
             }
         }
-        return true;
-    }
 
-    public static boolean[][] click(boolean[][] board, int position) {
-        int row = position / 3;
-        int col = position % 3;
+        System.out.println(count);
 
-        board[row][col] = !board[row][col];
-        if (row == 0 || row == 2) {
-            board[1][col] = !board[1][col];
-        } else {
-            board[0][col] = !board[0][col];
-            board[2][col] = !board[2][col];
-        }
-
-        if (col == 0 || col == 2) {
-            board[row][1] = !board[row][1];
-        } else {
-            board[row][0] = !board[row][0];
-            board[row][2] = !board[row][2];
-        }
-
-        return board;
     }
 
     static InputStream is = System.in;

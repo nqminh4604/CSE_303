@@ -1,71 +1,59 @@
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
-import java.util.List;
 
-public class EIFLIP {
+public class EIUMERSORT {
 
-    static int min = Integer.MAX_VALUE;
     public static void main(String[] args) {
-        int tc = ni();
-        for (int i = 0; i < tc; i++) {
-            boolean[][] board = getBoard();
-            int count = 0;
-            for (int position = 0; position < 9; position++) {
-                boolean[][] newBoard = click(board, position);
-                if (compareToModel(newBoard)) {
-                    
-                }
-                List<Boolean[][]> list = new ArrayList<>();
-            } 
+        int n = ni();
+        int[] arr = new int[n];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = ni();
         }
+        mergeSort(arr);
+        StringBuilder sb = new StringBuilder();
+        for (int i : arr) {
+            sb.append(i).append("\n");
+        }
+        System.out.println(sb);
+
     }
 
-    
-    public static boolean[][] getBoard() {
-        boolean[][] board = new boolean[3][3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                board[i][j] = ns().equals("*") ? true : false;
+    static int[] temp = null;
+
+    public static void mergeSort(int[] arr) {
+        temp = new int[arr.length];
+        int left = 0;
+        int right = arr.length;
+        int mid = (left + right) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid, right);
+        merge(arr, left, right, mid);
+    }
+
+    public static void mergeSort(int[] arr, int left, int right) {
+        if (left >= right - 1) {
+            return;
+        }
+        int mid = (left + right) / 2;
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid, right);
+        merge(arr, left, right, mid);
+    }
+
+    public static void merge(int[] arr, int left, int right, int mid) {
+        int i = left;
+        int j = mid;
+        int k = left;
+        while (i < mid || j < right) {
+            if (j < right && arr[i] > arr[j] || i == mid) {
+                temp[k++] = arr[j++];
+            } else {
+                temp[k++] = arr[i++];
             }
         }
-        return board;
-    }
-    
-    static boolean[][] model = { { false, false, false }, { false, false, false }, { false, false, false } };
-    public static boolean compareToModel(boolean[][] board) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] != model[i][j]) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public static boolean[][] click(boolean[][] board, int position) {
-        int row = position / 3;
-        int col = position % 3;
-
-        board[row][col] = !board[row][col];
-        if (row == 0 || row == 2) {
-            board[1][col] = !board[1][col];
-        } else {
-            board[0][col] = !board[0][col];
-            board[2][col] = !board[2][col];
-        }
-
-        if (col == 0 || col == 2) {
-            board[row][1] = !board[row][1];
-        } else {
-            board[row][0] = !board[row][0];
-            board[row][2] = !board[row][2];
-        }
-
-        return board;
+        System.arraycopy(temp, left, arr, left, right - left);
     }
 
     static InputStream is = System.in;

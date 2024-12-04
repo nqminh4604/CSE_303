@@ -1,71 +1,39 @@
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
-import java.util.List;
 
-public class EIFLIP {
+public class EIUGAME {
 
-    static int min = Integer.MAX_VALUE;
     public static void main(String[] args) {
-        int tc = ni();
-        for (int i = 0; i < tc; i++) {
-            boolean[][] board = getBoard();
-            int count = 0;
-            for (int position = 0; position < 9; position++) {
-                boolean[][] newBoard = click(board, position);
-                if (compareToModel(newBoard)) {
-                    
-                }
-                List<Boolean[][]> list = new ArrayList<>();
-            } 
-        }
-    }
+        int row = ni();
+        int col = ni();
+        int[][] matrix = new int[row][col];
+        long[][] dp = new long[row][col];
 
-    
-    public static boolean[][] getBoard() {
-        boolean[][] board = new boolean[3][3];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                board[i][j] = ns().equals("*") ? true : false;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                matrix[i][j] = ni();
             }
         }
-        return board;
-    }
-    
-    static boolean[][] model = { { false, false, false }, { false, false, false }, { false, false, false } };
-    public static boolean compareToModel(boolean[][] board) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] != model[i][j]) {
-                    return false;
-                }
+
+        dp[0][0] = matrix[0][0];
+
+        for (int i = 1; i < row; i++) {
+            dp[i][0] = dp[i - 1][0] + matrix[i][0];
+        }
+
+        for (int i = 1; i < col; i++) {
+            dp[0][i] = dp[0][i - 1] + matrix[0][i];
+        }
+
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                dp[i][j] = Math.max(matrix[i][j] + dp[i - 1][j], matrix[i][j] + dp[i][j - 1]);
             }
         }
-        return true;
-    }
 
-    public static boolean[][] click(boolean[][] board, int position) {
-        int row = position / 3;
-        int col = position % 3;
-
-        board[row][col] = !board[row][col];
-        if (row == 0 || row == 2) {
-            board[1][col] = !board[1][col];
-        } else {
-            board[0][col] = !board[0][col];
-            board[2][col] = !board[2][col];
-        }
-
-        if (col == 0 || col == 2) {
-            board[row][1] = !board[row][1];
-        } else {
-            board[row][0] = !board[row][0];
-            board[row][2] = !board[row][2];
-        }
-
-        return board;
+        System.out.println(dp[row - 1][col - 1]);
     }
 
     static InputStream is = System.in;
