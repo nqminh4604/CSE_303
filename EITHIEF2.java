@@ -3,47 +3,23 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 
-class LOGGING3 {
+public class EITHIEF2 {
 
     public static void main(String[] args) {
         int n = ni();
-        long[] dp = new long[n];
-        long[] ways = new long[n];
-        long mod = 1000000007;
-        long number = 0;
+        int p = ni();
+        int[] itemWeight = new int[n + 1];
+        int[] itemValue = new int[n + 1];
+        long[] dp = new long[p + 1];
 
-        for (int i = 0; i < n; i++) {
-
-            number = nl();
-            if (i == 0) {
-                if (number >= 0) {
-                    dp[i] = number;
-                }
-                ways[i] = 1;
-            } else if (i == 1) {
-                dp[i] = Math.max(dp[i - 1], number);
-                if (dp[i] == number) {
-                    ways[i] = 1;
-                }
-                if (dp[i] == dp[i - 1]) {
-                    ways[i] = (ways[i] + ways[i - 1]) % mod;
-                }
-            } else {
-                if (dp[i - 1] > dp[i - 2] + number) {
-                    dp[i] = dp[i - 1];
-                    ways[i] = ways[i - 1];
-                } else if (dp[i - 1] < dp[i - 2] + number) {
-                    dp[i] = dp[i - 2] + number;
-                    ways[i] = ways[i - 2];
-                } else {
-                    dp[i] = dp[i - 1];
-                    ways[i] = (ways[i - 1] + ways[i - 2]) % mod;
-                }
+        for (int i = 1; i <= n; i++) {
+            itemWeight[i] = ni();
+            itemValue[i] = ni();
+            for (int j = p; j >= itemWeight[i]; j--) {
+                dp[j] = Math.max(dp[j], itemValue[i] + dp[j - itemWeight[i]]);
             }
-
         }
-
-        System.out.println(dp[n - 1] + " " + ways[n - 1]);
+        System.out.println(dp[p]);
     }
 
     static InputStream is = System.in;

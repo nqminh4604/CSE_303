@@ -12,18 +12,22 @@ class LOGGING2 {
 
         for (int i = 0; i < n; i++) {
             number = ni();
-            
+
             if (i == 0) {
                 if (number > 0) {
                     dp[i] = number;
                 }
             } else if (i == 1) {
                 dp[i] = Math.max(dp[i - 1], number);
+            } else if (i == 2) {
+                dp[i] = Math.max(dp[i - 1], number);
             } else {
                 if (number < 0) {
-                    dp[i] = Math.max(dp[i - 2] + 0, dp[i - 1]);
+                    dp[i] = Math.max(dp[i - 3], dp[i - 2]);
+                    dp[i] = Math.max(dp[i], dp[i - 1]);
                 } else {
-                    dp[i] = Math.max(dp[i - 2] + number, dp[i - 1]);
+                    dp[i] = Math.max(dp[i - 3] + number, dp[i - 2]);
+                    dp[i] = Math.max(dp[i], dp[i - 1]);
                 }
             }
 

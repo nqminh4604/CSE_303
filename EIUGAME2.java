@@ -3,47 +3,52 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 
-class LOGGING3 {
+public class EIUGAME2 {
 
     public static void main(String[] args) {
-        int n = ni();
-        long[] dp = new long[n];
-        long[] ways = new long[n];
-        long mod = 1000000007;
-        long number = 0;
+        int row = ni();
+        int col = ni();
+        long mod = 10000000;
 
-        for (int i = 0; i < n; i++) {
+        long[][] matrix = new long[row][col];
+        long[][] dp = new long[row][col];
+        long[][] way = new long[row][col];
 
-            number = nl();
-            if (i == 0) {
-                if (number >= 0) {
-                    dp[i] = number;
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                matrix[i][j] = nl();
+                if (i == 0 && j == 0) {
+                    dp[i][j] = matrix[i][j];
+                    way[i][j] = 1;
                 }
-                ways[i] = 1;
-            } else if (i == 1) {
-                dp[i] = Math.max(dp[i - 1], number);
-                if (dp[i] == number) {
-                    ways[i] = 1;
+                if (i > 0 && j == 0) {
+                    dp[i][j] = dp[i - 1][j] + matrix[i][j];
+                    way[i][j] = way[i - 1][j];
                 }
-                if (dp[i] == dp[i - 1]) {
-                    ways[i] = (ways[i] + ways[i - 1]) % mod;
-                }
-            } else {
-                if (dp[i - 1] > dp[i - 2] + number) {
-                    dp[i] = dp[i - 1];
-                    ways[i] = ways[i - 1];
-                } else if (dp[i - 1] < dp[i - 2] + number) {
-                    dp[i] = dp[i - 2] + number;
-                    ways[i] = ways[i - 2];
-                } else {
-                    dp[i] = dp[i - 1];
-                    ways[i] = (ways[i - 1] + ways[i - 2]) % mod;
+                if (j > 0 && i == 0) {
+                    dp[i][j] = dp[i][j - 1] + matrix[i][j];
+                    way[i][j] = way[i][j - 1];
                 }
             }
-
         }
 
-        System.out.println(dp[n - 1] + " " + ways[n - 1]);
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                if (dp[i - 1][j] > dp[i][j - 1]) {
+                    dp[i][j] = dp[i - 1][j] + matrix[i][j];
+                    way[i][j] = way[i - 1][j];
+                } else if (dp[i - 1][j] < dp[i][j - 1]) {
+                    dp[i][j] = dp[i][j - 1] + matrix[i][j];
+                    way[i][j] = way[i][j - 1];
+                } else {
+                    dp[i][j] = dp[i][j - 1] + matrix[i][j];
+                    way[i][j] = (way[i - 1][j] + way[i][j - 1]) % mod ;
+                }
+            }
+        }
+
+        System.out.println(dp[row - 1][col - 1] + " " + (way[row - 1][col - 1] % mod));
     }
 
     static InputStream is = System.in;
@@ -143,4 +148,5 @@ class LOGGING3 {
             b = readByte();
         }
     }
+
 }
