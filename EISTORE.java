@@ -3,36 +3,26 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 
-public class EIUCOINGAME2 {
+public class EISTORE {
 
     public static void main(String[] args) {
         int n = ni();
-        int[] number = new int[n];
+        int money = ni();
+        long[] dp = new long[money + 1];
 
-        for (int i = 0; i < number.length; i++) {
-            number[i] = ni();
+        for (int i = 0; i < n; i++) {
+            int price = ni();
+            dp[price] = 1;
+            for (int j = price + 1; j < dp.length; j++) {
+                if (dp[j - price] > 0) {
+                    dp[j] = Math.min(dp[j] > 0 ? dp[j] : dp[j - price] + 1 , dp[j - price] + 1);
+                } else {
+                    dp[j] = Math.max(dp[j], dp[j - price] == 0 ? 0 : dp[j - price] + 1);
+                }
+            }
         }
 
-        System.out.println(calcBestTotal(number, 0, n - 1, new int[n][n]));
-
-    }
-
-    public static int calcBestTotal(int[] arr, int start, int end, int[][] caches) {
-
-        if (start > end) {
-            return 0;
-        }
-
-        if (caches[start][end] > 0 ) {
-            return caches[start][end];
-        }
-        
-        return caches[start][end] = Math.max(
-                arr[start]
-                        + Math.min(calcBestTotal(arr, start + 2, end, caches),
-                                calcBestTotal(arr, start + 1, end - 1, caches)),
-                arr[end] + Math.min(calcBestTotal(arr, start, end - 2, caches),
-                        calcBestTotal(arr, start + 1, end - 1, caches)));
+        System.out.println(dp[money]);
     }
 
     static InputStream is = System.in;
@@ -132,5 +122,4 @@ public class EIUCOINGAME2 {
             b = readByte();
         }
     }
-
 }

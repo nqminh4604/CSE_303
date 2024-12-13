@@ -3,36 +3,53 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 
-public class EIUCOINGAME2 {
+public class EIUMINDIST {
 
     public static void main(String[] args) {
         int n = ni();
-        int[] number = new int[n];
+        int distance = ni();
+        int result = 0;
 
-        for (int i = 0; i < number.length; i++) {
-            number[i] = ni();
+        double[] arr = new double[n];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = ni();
         }
 
-        System.out.println(calcBestTotal(number, 0, n - 1, new int[n][n]));
+        Arrays.sort(arr);
+
+        int start = 1, end = (int) (arr[n - 1] - arr[0]);
+        int mid = end / 2;
+        int numberOfItem = countNumberOfItem(mid, arr);
+
+        while (start < end) {
+            if (numberOfItem < distance) {
+                end = mid - 1;
+            } else if (numberOfItem >= distance) {
+                result = Math.max(result, mid);
+                start = mid + 1;
+            }
+            mid = (start + end) / 2;
+            numberOfItem = countNumberOfItem(mid, arr);
+        }
+
+        System.out.println(mid);
 
     }
 
-    public static int calcBestTotal(int[] arr, int start, int end, int[][] caches) {
+    public static int countNumberOfItem(int distance, double[] arr) {
+        int count = 1;
 
-        if (start > end) {
-            return 0;
+        for (int i = 0; i < arr.length;) {
+            int nextIndex = Arrays.binarySearch(arr, arr[i] + distance - 0.1);
+            nextIndex = ~nextIndex;
+            if (nextIndex < arr.length) {
+                count++;
+            } else {
+                break;
+            }
+            i = nextIndex;
         }
-
-        if (caches[start][end] > 0 ) {
-            return caches[start][end];
-        }
-        
-        return caches[start][end] = Math.max(
-                arr[start]
-                        + Math.min(calcBestTotal(arr, start + 2, end, caches),
-                                calcBestTotal(arr, start + 1, end - 1, caches)),
-                arr[end] + Math.min(calcBestTotal(arr, start, end - 2, caches),
-                        calcBestTotal(arr, start + 1, end - 1, caches)));
+        return count;
     }
 
     static InputStream is = System.in;
@@ -132,5 +149,4 @@ public class EIUCOINGAME2 {
             b = readByte();
         }
     }
-
 }

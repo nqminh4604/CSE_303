@@ -1,39 +1,36 @@
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class EIBORE {
 
     public static void main(String[] args) {
         int n = ni();
-        Map<Integer, Integer> map = new TreeMap<>();
+        Map<Integer, Integer> map = new HashMap<>();
 
         for (int i = 0; i < n; i++) {
             int number = ni();
             map.put(number, map.getOrDefault(number, 0) + 1);
         }
 
-        int[] dp = new int[map.size()];
-        Integer[] arr = map.keySet().toArray(new Integer[map.size()]);
+        long[] dp = new long[map.size() + 1];
 
-        for (int i = 0; i < arr.length; i++) {
-            if (i == 0) {
-                dp[i] = arr[i] * map.get(arr[i]);
-            } else if (i == 1) {
-                dp[i] = arr[i - 1] * map.get(arr[i - 1]);
-            } else {
-                if (arr[i] - arr[i - 1] == 1) {
-                    dp[i] = Math.max(dp[i - 2] + arr[i - 1] * map.get(arr[i - 1]) , dp[i - 1]);
-                } else {
-                    dp[i] = dp[i - 1] + arr[i] * map.get(arr[i]);
-                }
+        int i = 1;
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            Integer number = entry.getKey();
+            Integer value = entry.getValue();
+            if (i == 1) {
+                dp[i] = number * value;
+            } else if (i > 1) {
+                dp[i] = Math.max(dp[i - 2] + number * value, dp[i - 1]);
             }
+            i++;
         }
 
-        System.out.println("result: " + dp[map.size() - 1]);
+        System.out.println(dp[dp.length - 1]);
     }
 
     static InputStream is = System.in;
